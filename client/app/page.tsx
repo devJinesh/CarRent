@@ -252,7 +252,7 @@ export default function Home() {
                 </svg>
                 <p className="text-xl font-semibold text-muted-foreground mb-2">No cars available</p>
                 <p className="text-muted-foreground">
-                  {filterStartDate || filterEndDate
+                  {filterStartDateTime || filterEndDateTime
                     ? "Try adjusting your search dates"
                     : "Check back later for available vehicles"}
                 </p>
