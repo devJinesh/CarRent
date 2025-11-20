@@ -7,7 +7,7 @@ import { useRouter, useParams } from "next/navigation"
 import { Header } from "@/components/layout/header"
 import { Footer } from "@/components/layout/footer"
 import { ApiClient } from "@/lib/api"
-import { getUser } from "@/lib/auth"
+import { getUser, isAuthenticated } from "@/lib/auth"
 import { LoadingSpinner } from "@/components/ui/loading"
 import { DateTimePicker } from "@/components/ui/datetime-picker"
 import moment from "moment"
@@ -47,10 +47,16 @@ export default function BookingPage() {
   const [totalAmount, setTotalAmount] = useState(0)
 
   useEffect(() => {
+    // Check authentication first
+    if (!isAuthenticated()) {
+      router.push("/login")
+      return
+    }
+
     const fetchCar = async () => {
       try {
         setLoading(true)
-        const response = await ApiClient.get<{ cars: Car[] }>("/api/cars/getallcars")
+        const response = await ApiClient.get<{ cars: Car[] }>("/api/cars/getallcars", false)
         if (response.success) {
           const selectedCar = response.cars?.find((c: Car) => c._id === carId)
           if (selectedCar) {
@@ -67,7 +73,7 @@ export default function BookingPage() {
     }
 
     fetchCar()
-  }, [carId])
+  }, [carId, router])
 
   useEffect(() => {
     if (startDateTime && endDateTime && car) {

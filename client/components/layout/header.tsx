@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import Image from "next/image"
 import { useRouter, usePathname } from "next/navigation"
 import { useState, useEffect } from "react"
 import { getUser, clearUser, isAdmin } from "@/lib/auth"
@@ -42,53 +43,49 @@ export function Header() {
     <header className="fixed top-0 w-full gradient-header backdrop-blur-md bg-surface/95 border-b border-border/40 z-50 shadow-lg">
       <div className="max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
         <div className="flex justify-between items-center h-20">
-          {user ? (
-            <Link href="/" className="flex items-center gap-3 font-bold text-xl hover:text-accent transition-all duration-300 group">
-              <div className="w-11 h-11 rounded-xl flex items-center justify-center shadow-lg bg-gradient-to-br from-accent to-accent/80 text-2xl text-white group-hover:scale-105 transition-transform duration-300">
-                C
-              </div>
-              <span className="text-xl">CarRent</span>
-            </Link>
-          ) : (
-            <div className="flex items-center gap-3 font-bold text-xl">
-              <div className="w-11 h-11 rounded-xl flex items-center justify-center shadow-lg bg-gradient-to-br from-accent to-accent/80 text-2xl text-white">
-                C
-              </div>
-              <span className="text-xl">CarRent</span>
+          <Link href="/" className="flex items-center gap-3 font-bold text-xl hover:text-accent transition-all duration-300 group">
+            <div className="relative w-11 h-11 group-hover:scale-105 transition-transform duration-300">
+              <Image 
+                src="/logo.svg" 
+                alt="CarRent Logo" 
+                width={44} 
+                height={44}
+                className="object-contain"
+                priority
+              />
             </div>
-          )}
+            <span className="text-xl">CarRent</span>
+          </Link>
 
           <nav className="hidden md:flex gap-8 items-center">
+            <a href="/#cars" onClick={handleBrowseCars} className="font-medium hover:text-accent transition-all duration-200 relative group cursor-pointer">
+              <span>Browse Cars</span>
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-accent group-hover:w-full transition-all duration-300"></span>
+            </a>
+            <Link href="/services" className="font-medium hover:text-accent transition-all duration-200 relative group">
+              <span>Services</span>
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-accent group-hover:w-full transition-all duration-300"></span>
+            </Link>
             {user && (
-              <>
-                <a href="/#cars" onClick={handleBrowseCars} className="font-medium hover:text-accent transition-all duration-200 relative group cursor-pointer">
-                  <span>Browse Cars</span>
-                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-accent group-hover:w-full transition-all duration-300"></span>
-                </a>
-                <Link href="/services" className="font-medium hover:text-accent transition-all duration-200 relative group">
-                  <span>Services</span>
-                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-accent group-hover:w-full transition-all duration-300"></span>
-                </Link>
-                <Link href="/bookings" className="font-medium hover:text-accent transition-all duration-200 relative group">
-                  <span>My Bookings</span>
-                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-accent group-hover:w-full transition-all duration-300"></span>
-                </Link>
-                {isAdmin(user) && (
-                  <Link href="/admin" className="font-medium hover:text-accent transition-all duration-200 relative group">
-                    <span>Admin</span>
-                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-accent group-hover:w-full transition-all duration-300"></span>
-                  </Link>
-                )}
-                <Link href="/about" className="font-medium hover:text-accent transition-all duration-200 relative group">
-                  <span>About</span>
-                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-accent group-hover:w-full transition-all duration-300"></span>
-                </Link>
-                <Link href="/contact" className="font-medium hover:text-accent transition-all duration-200 relative group">
-                  <span>Contact</span>
-                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-accent group-hover:w-full transition-all duration-300"></span>
-                </Link>
-              </>
+              <Link href="/bookings" className="font-medium hover:text-accent transition-all duration-200 relative group">
+                <span>My Bookings</span>
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-accent group-hover:w-full transition-all duration-300"></span>
+              </Link>
             )}
+            {isAdmin(user) && (
+              <Link href="/admin" className="font-medium hover:text-accent transition-all duration-200 relative group">
+                <span>Admin</span>
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-accent group-hover:w-full transition-all duration-300"></span>
+              </Link>
+            )}
+            <Link href="/about" className="font-medium hover:text-accent transition-all duration-200 relative group">
+              <span>About</span>
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-accent group-hover:w-full transition-all duration-300"></span>
+            </Link>
+            <Link href="/contact" className="font-medium hover:text-accent transition-all duration-200 relative group">
+              <span>Contact</span>
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-accent group-hover:w-full transition-all duration-300"></span>
+            </Link>
           </nav>
 
           <div className="flex items-center gap-4">

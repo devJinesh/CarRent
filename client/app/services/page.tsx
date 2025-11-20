@@ -1,11 +1,9 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
 import { Header } from "@/components/layout/header"
 import { Footer } from "@/components/layout/footer"
 import { ApiClient } from "@/lib/api"
-import { isAuthenticated } from "@/lib/auth"
 import Link from "next/link"
 
 interface Car {
@@ -18,22 +16,16 @@ interface Car {
 }
 
 export default function ServicesPage() {
-  const router = useRouter()
   const [cars, setCars] = useState<Car[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [showCars, setShowCars] = useState(false)
 
   useEffect(() => {
-    if (!isAuthenticated()) {
-      router.push("/login")
-      return
-    }
-
     const fetchCars = async () => {
       try {
         setLoading(true)
-        const response = await ApiClient.get<{ cars: Car[] }>("/api/cars/getallcars")
+        const response = await ApiClient.get<{ cars: Car[] }>("/api/cars/getallcars", false)
         if (response.success) {
           setCars(response.cars || [])
         } else {
@@ -47,7 +39,7 @@ export default function ServicesPage() {
     }
 
     fetchCars()
-  }, [router])
+  }, [])
 
   const services = [
     {

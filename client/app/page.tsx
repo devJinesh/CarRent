@@ -7,7 +7,6 @@ import { Footer } from "@/components/layout/footer"
 import { HeroSection } from "@/components/sections/hero-section"
 import { ServicesSection } from "@/components/sections/services-section"
 import { ReviewsSection } from "@/components/sections/reviews-section"
-import { isAuthenticated } from "@/lib/auth"
 import { ApiClient } from "@/lib/api"
 import { DateTimePicker } from "@/components/ui/datetime-picker"
 import Link from "next/link"
@@ -25,7 +24,6 @@ interface Car {
 
 export default function Home() {
   const router = useRouter()
-  const [isChecking, setIsChecking] = useState(true)
   const [cars, setCars] = useState<Car[]>([])
   const [filteredCars, setFilteredCars] = useState<Car[]>([])
   const [loading, setLoading] = useState(true)
@@ -36,16 +34,10 @@ export default function Home() {
   const [showCarsSection, setShowCarsSection] = useState(false)
 
   useEffect(() => {
-    if (!isAuthenticated()) {
-      router.push("/login")
-      return
-    }
-    setIsChecking(false)
-
     const fetchCars = async () => {
       try {
         setLoading(true)
-        const response = await ApiClient.get<{ cars: Car[] }>("/api/cars/getallcars")
+        const response = await ApiClient.get<{ cars: Car[] }>("/api/cars/getallcars", false)
         if (response.success) {
           const carsList = response.cars || []
           setCars(carsList)
@@ -90,7 +82,7 @@ export default function Home() {
     return () => {
       window.removeEventListener('showCarsSection', handleShowCars)
     }
-  }, [router])
+  }, [])
 
   const handleFilter = () => {
     if (!filterStartDateTime || !filterEndDateTime) {
@@ -139,10 +131,6 @@ export default function Home() {
     setFilterEndDateTime(null)
     setFilteredCars(cars)
     setError(null)
-  }
-
-  if (isChecking) {
-    return null
   }
 
   return (

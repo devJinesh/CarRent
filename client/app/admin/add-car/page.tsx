@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { Header } from "@/components/layout/header"
 import { Footer } from "@/components/layout/footer"
@@ -20,6 +20,12 @@ export default function AddCarPage() {
     capacity: "5",
     rentPerHour: "",
   })
+
+  useEffect(() => {
+    if (!isAuthenticated() || !getUser()?.admin) {
+      router.push("/")
+    }
+  }, [router])
 
   if (!isAuthenticated() || !getUser()?.admin) {
     return null
